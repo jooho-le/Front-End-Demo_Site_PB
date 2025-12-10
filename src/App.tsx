@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp';
 import { AuthProvider } from './context/AuthContext';
 import { WishlistProvider } from './context/WishlistContext';
 import AuthModal from './components/auth/AuthModal';
+import ProtectedRoute from './routes/ProtectedRoute';
 
 function App() {
   return (
@@ -17,10 +18,12 @@ function App() {
         <WishlistProvider>
           <MainLayout>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/popular" element={<Popular />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/wishlist" element={<Wishlist />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/popular" element={<Popular />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/wishlist" element={<Wishlist />} />
+              </Route>
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
             </Routes>

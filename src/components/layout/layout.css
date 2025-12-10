@@ -23,13 +23,20 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 32px 20px 64px;
-  animation: nf-fade-up 0.5s ease both;
 }
 
-@keyframes nf-fade-up {
+.nf-main__page {
+  min-height: 70vh;
+}
+
+.nf-main__page--animate {
+  animation: nf-page-fade 0.4s ease;
+}
+
+@keyframes nf-page-fade {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;

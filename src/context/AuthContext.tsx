@@ -32,7 +32,8 @@ type AuthContextType = {
 };
 
 const STORAGE_NAMESPACE = process.env.REACT_APP_STORAGE_NAMESPACE || 'netflix-lite';
-const STORAGE_KEY_USER = `${STORAGE_NAMESPACE}:user`;
+const STORAGE_KEY_USERS = `${STORAGE_NAMESPACE}:users`;
+const STORAGE_KEY_CURRENT = `${STORAGE_NAMESPACE}:currentUser`;
 const STORAGE_KEY_LOGIN = `${STORAGE_NAMESPACE}:login`;
 const STORAGE_KEY_TMDB = `${STORAGE_NAMESPACE}:tmdb-key`;
 const STORAGE_KEY_REMEMBER = `${STORAGE_NAMESPACE}:remember`;
@@ -46,12 +47,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem(STORAGE_KEY_USER);
+    const storedUsers = localStorage.getItem(STORAGE_KEY_USERS);
+    const storedCurrent = localStorage.getItem(STORAGE_KEY_CURRENT);
     const storedLogin = localStorage.getItem(STORAGE_KEY_LOGIN) === 'true';
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (storedUsers) {
+      try {
+        const list: AuthUser[] = JSON.parse(storedUsers);
+        const found = list.find((u) => u.id === storedCurrent);
+        if (found) setUser(found);
+      } catch {
+        // ignore parse errors
+      }
     }
-    setIsLoggedIn(storedLogin);
+    setIsLoggedIn(storedLogin && !!storedCurrent);
   }, []);
 
   const openModal = (nextMode: AuthMode) => {
@@ -74,9 +82,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!agree) {
       return { ok: false, message: '약관에 동의해야 합니다.' };
     }
+    const storedUsers = localStorage.getItem(STORAGE_KEY_USERS);
+    const list: AuthUser[] = storedUsers ? JSON.parse(storedUsers) : [];
+    if (list.some((u) => u.id === id)) {
+      return { ok: false, message: '이미 가입된 이메일입니다.' };
+    }
     const newUser: AuthUser = { id, password };
-    localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(newUser));
+    const next = [...list, newUser];
+    localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(next));
     localStorage.setItem(STORAGE_KEY_TMDB, password);
+    localStorage.setItem(STORAGE_KEY_CURRENT, newUser.id);
     localStorage.setItem(STORAGE_KEY_LOGIN, 'false');
     setUser(newUser);
     setIsLoggedIn(false);
@@ -86,29 +101,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signin = (id: string, password: string, remember = false) => {
-    const stored = localStorage.getItem(STORAGE_KEY_USER);
-    if (!stored) {
-      return { ok: false, message: '가입된 계정이 없습니다.' };
+    const stored = localStorage.getItem(STORAGE_KEY_USERS);
+    const users = stored ? (JSON.parse(stored) as AuthUser[]) : [];
+    const found = users.find((u) => u.id === id && u.password === password);
+    if (!found) {
+      return { ok: false, message: '이메일 또는 비밀번호가 올바르지 않습니다.' };
     }
-    const parsed: AuthUser = JSON.parse(stored);
-    if (parsed.id === id && parsed.password === password) {
-      localStorage.setItem(STORAGE_KEY_LOGIN, 'true');
-      localStorage.setItem(STORAGE_KEY_TMDB, password);
-      if (remember) {
-        localStorage.setItem(STORAGE_KEY_REMEMBER, 'true');
-      } else {
-        localStorage.removeItem(STORAGE_KEY_REMEMBER);
-      }
-      setUser(parsed);
-      setIsLoggedIn(true);
-      setOpen(false);
-      return { ok: true };
+    localStorage.setItem(STORAGE_KEY_LOGIN, 'true');
+    localStorage.setItem(STORAGE_KEY_TMDB, password);
+    localStorage.setItem(STORAGE_KEY_CURRENT, found.id);
+    if (remember) {
+      localStorage.setItem(STORAGE_KEY_REMEMBER, 'true');
+    } else {
+      localStorage.removeItem(STORAGE_KEY_REMEMBER);
     }
-    return { ok: false, message: '이메일 또는 비밀번호가 올바르지 않습니다.' };
+    setUser(found);
+    setIsLoggedIn(true);
+    setOpen(false);
+    return { ok: true };
   };
 
   const signout = () => {
     localStorage.setItem(STORAGE_KEY_LOGIN, 'false');
+    localStorage.removeItem(STORAGE_KEY_CURRENT);
     setIsLoggedIn(false);
   };
 

@@ -1,3 +1,4 @@
+import { FaHeart } from 'react-icons/fa';
 import { TmdbMovie } from '../../api/tmdb';
 import { useWishlist } from '../../context/WishlistContext';
 import './movie-card.css';
@@ -17,7 +18,7 @@ function MovieCard({ movie, size = 'md' }: Props) {
   return (
     <article className={`nf-card ${size === 'sm' ? 'nf-card--compact' : ''} ${wished ? 'nf-card--wished' : ''}`}>
       <button className="nf-card__wish" onClick={() => toggle(movie)} aria-label="toggle wishlist">
-        {wished ? '★' : '☆'}
+        <FaHeart fill={wished ? '#ff6b8a' : 'rgba(255,255,255,0.75)'} />
       </button>
       <div className="nf-card__thumb">
         {movie.poster_path ? (

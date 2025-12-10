@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './auth-form.css';
@@ -14,8 +14,15 @@ function AuthForm() {
   const [agree, setAgree] = useState(false);
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState('');
+  const emailRef = useRef<HTMLInputElement | null>(null);
 
   const isSignup = mode === 'signup';
+
+  useEffect(() => {
+    if (!isSignup && emailRef.current) {
+      emailRef.current.focus();
+    }
+  }, [isSignup]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -63,6 +70,7 @@ function AuthForm() {
           <label className="nf-auth__field">
             <span>이메일</span>
             <input
+              ref={emailRef}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

@@ -1,12 +1,9 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+
+# npm/yarn updates are disabled until a package manifest is added.
+# Re-enable by adding an `npm` entry here once package.json exists.

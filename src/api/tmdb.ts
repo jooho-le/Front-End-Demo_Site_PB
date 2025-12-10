@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+// Endpoints used in this app:
+// /movie/popular, /movie/now_playing, /movie/top_rated, /movie/upcoming, /search/movie, /genre/movie/list
+
 const apiKey = process.env.REACT_APP_TMDB_API_KEY;
 const baseURL = process.env.REACT_APP_TMDB_API_BASE || 'https://api.themoviedb.org/3';
 const defaultLanguage = process.env.REACT_APP_TMDB_LANGUAGE || 'ko-KR';

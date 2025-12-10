@@ -4,34 +4,16 @@ import './popular.css';
 import MovieCard from '../components/movie/MovieCard';
 import Spinner from '../components/common/Spinner';
 import TopButton from '../components/common/TopButton';
+import { useMovies } from '../hooks/useMovies';
 
 function Popular() {
   const [view, setView] = useState<'table' | 'infinite'>('table');
-  const [movies, setMovies] = useState<TmdbMovie[]>([]);
-  const [pages, setPages] = useState<Record<number, TmdbMovie[]>>({});
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { data: tableData, loading, error } = useMovies<TmdbMovie>(() => fetchPopular(page), [page]);
   const [infinitePage, setInfinitePage] = useState(1);
   const [infiniteItems, setInfiniteItems] = useState<TmdbMovie[]>([]);
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const load = async (p: number) => {
-      try {
-        setLoading(true);
-        const data = await fetchPopular(p);
-        setMovies(data);
-        setPages((prev) => ({ ...prev, [p]: data }));
-      } catch (err) {
-        setError('TMDB 데이터를 불러오지 못했습니다. API 키와 네트워크를 확인하세요.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    load(page);
-  }, [page]);
 
   useEffect(() => {
     const loadMore = async () => {
@@ -66,7 +48,7 @@ function Popular() {
     return () => observer.disconnect();
   }, [view, infiniteLoading]);
 
-  const tableData = useMemo(() => pages[page] || movies, [page, pages, movies]);
+  const memoTable = useMemo(() => tableData, [tableData]);
 
   return (
     <section className="nf-section">
@@ -112,7 +94,7 @@ function Popular() {
           )}
           {error && <p className="nf-popular__state nf-popular__state--error">{error}</p>}
           <div className="nf-popular__grid">
-            {tableData.map((movie) => (
+            {memoTable.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>

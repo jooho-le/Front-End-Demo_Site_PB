@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { FaArrowUp } from 'react-icons/fa';
 import './top-button.css';
 
 function TopButton() {
@@ -19,7 +20,7 @@ function TopButton() {
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Go to top"
     >
-      ↑ Top
+      <FaArrowUp /> Top
     </button>
   );
 }

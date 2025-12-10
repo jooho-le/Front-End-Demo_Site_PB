@@ -64,3 +64,10 @@ export async function searchMovies(query: string, page = 1) {
   });
   return res.data.results;
 }
+
+export type TmdbGenre = { id: number; name: string };
+
+export async function fetchGenres() {
+  const res = await tmdb.get<{ genres: TmdbGenre[] }>('/genre/movie/list');
+  return res.data.genres;
+}

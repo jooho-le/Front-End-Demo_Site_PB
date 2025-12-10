@@ -1,0 +1,107 @@
+:root {
+  --nf-bg: #050712;
+  --nf-surface: rgba(255, 255, 255, 0.04);
+  --nf-border: rgba(255, 255, 255, 0.08);
+  --nf-text: #e6e9ff;
+  --nf-muted: rgba(230, 233, 255, 0.7);
+  --nf-accent: #5be2ff;
+  --nf-accent-2: #b774ff;
+  --nf-danger: #ff6b8a;
+  font-family: 'Inter', 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+  background-color: var(--nf-bg);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(68, 155, 255, 0.14), transparent 32%),
+    radial-gradient(circle at 80% 0%, rgba(181, 96, 255, 0.12), transparent 32%),
+    var(--nf-bg);
+  color: var(--nf-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+.nf-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--nf-border);
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+  animation: nf-appear 0.55s ease both;
+}
+
+.nf-section__badge {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  color: #0d0f16;
+  background: linear-gradient(135deg, var(--nf-accent), var(--nf-accent-2));
+  box-shadow: 0 8px 24px rgba(68, 155, 255, 0.32);
+}
+
+.nf-section__title {
+  margin: 14px 0 8px;
+  font-size: clamp(1.6rem, 2.5vw, 2.3rem);
+}
+
+.nf-section__body {
+  margin: 0;
+  color: var(--nf-muted);
+  line-height: 1.6;
+}
+
+button,
+.nf-btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #0d0f16;
+  background: linear-gradient(135deg, var(--nf-accent), var(--nf-accent-2));
+  box-shadow: 0 12px 30px rgba(68, 155, 255, 0.4);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+button:hover,
+.nf-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 16px 34px rgba(68, 155, 255, 0.5);
+}
+
+button:active,
+.nf-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 10px 24px rgba(68, 155, 255, 0.35);
+}
+
+@keyframes nf-appear {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .nf-section {
+    padding: 22px;
+  }
+}

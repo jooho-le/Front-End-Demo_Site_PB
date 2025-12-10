@@ -1,0 +1,38 @@
+.nf-shell {
+  min-height: 100vh;
+  background: radial-gradient(circle at 10% 20%, rgba(68, 155, 255, 0.12), transparent 35%),
+    radial-gradient(circle at 90% 10%, rgba(181, 96, 255, 0.12), transparent 35%),
+    linear-gradient(135deg, #050712 0%, #0a1020 50%, #050712 100%);
+  color: #e6e9ff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.nf-backdrop {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(68, 155, 255, 0.06), rgba(181, 96, 255, 0.05));
+  filter: blur(36px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.nf-main {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+  animation: nf-fade-up 0.5s ease both;
+}
+
+@keyframes nf-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

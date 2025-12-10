@@ -1,0 +1,58 @@
+.nf-home__state {
+  margin: 12px 0;
+  color: var(--nf-muted);
+}
+
+.nf-home__state--error {
+  color: #ff9090;
+}
+
+.nf-home__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.nf-home__column {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--nf-border);
+  border-radius: 14px;
+  padding: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.nf-home__column-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.nf-section__badge--small {
+  padding: 4px 10px;
+  font-size: 0.78rem;
+}
+
+.nf-home__column h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.nf-home__cards {
+  display: grid;
+  gap: 10px;
+}
+
+.nf-card--compact .nf-card__thumb {
+  padding-top: 140%;
+}
+
+.nf-card--compact .nf-card__body {
+  padding: 10px 10px 12px;
+}
+
+.nf-card--compact h4 {
+  margin: 0;
+  font-size: 1rem;
+}

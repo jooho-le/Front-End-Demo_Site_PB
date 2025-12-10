@@ -1,0 +1,51 @@
+.nf-search__form {
+  display: flex;
+  gap: 10px;
+  margin: 14px 0 12px;
+}
+
+.nf-search__form input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--nf-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+}
+
+.nf-search__form input:focus {
+  outline: none;
+  border-color: rgba(229, 57, 53, 0.5);
+  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.12);
+}
+
+.nf-search__form button {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #0d0f16;
+  background: linear-gradient(135deg, var(--nf-accent), var(--nf-accent-2));
+  box-shadow: 0 12px 30px rgba(229, 57, 53, 0.35);
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.nf-search__form button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(229, 57, 53, 0.45);
+}
+
+.nf-search__state {
+  margin: 10px 0;
+  color: var(--nf-muted);
+}
+
+.nf-search__state--error {
+  color: #ff9090;
+}
+
+.nf-search__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}

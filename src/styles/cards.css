@@ -1,0 +1,63 @@
+.nf-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--nf-border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.nf-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(229, 57, 53, 0.45);
+  box-shadow: 0 16px 38px rgba(229, 57, 53, 0.2);
+}
+
+.nf-card__thumb {
+  position: relative;
+  padding-top: 150%;
+  background: linear-gradient(135deg, rgba(229, 57, 53, 0.12), rgba(0, 0, 0, 0.4));
+}
+
+.nf-card__thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nf-card__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--nf-muted);
+  font-size: 0.95rem;
+}
+
+.nf-card__body {
+  padding: 12px 14px 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.nf-card__meta {
+  margin: 0;
+  color: var(--nf-muted);
+  font-size: 0.9rem;
+}
+
+.nf-card__overview {
+  margin: 0;
+  color: var(--nf-muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

@@ -1,0 +1,15 @@
+.nf-popular__state {
+  margin: 16px 0;
+  color: var(--nf-muted);
+}
+
+.nf-popular__state--error {
+  color: #ff9090;
+}
+
+.nf-popular__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}

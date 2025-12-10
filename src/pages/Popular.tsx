@@ -1,28 +1,72 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { fetchPopular, TmdbMovie } from '../api/tmdb';
 import './popular.css';
 import MovieCard from '../components/movie/MovieCard';
 import Spinner from '../components/common/Spinner';
+import TopButton from '../components/common/TopButton';
 
 function Popular() {
+  const [view, setView] = useState<'table' | 'infinite'>('table');
   const [movies, setMovies] = useState<TmdbMovie[]>([]);
+  const [pages, setPages] = useState<Record<number, TmdbMovie[]>>({});
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [infinitePage, setInfinitePage] = useState(1);
+  const [infiniteItems, setInfiniteItems] = useState<TmdbMovie[]>([]);
+  const [infiniteLoading, setInfiniteLoading] = useState(false);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const load = async () => {
+    const load = async (p: number) => {
       try {
         setLoading(true);
-        const data = await fetchPopular(1);
+        const data = await fetchPopular(p);
         setMovies(data);
+        setPages((prev) => ({ ...prev, [p]: data }));
       } catch (err) {
         setError('TMDB 데이터를 불러오지 못했습니다. API 키와 네트워크를 확인하세요.');
       } finally {
         setLoading(false);
       }
     };
-    load();
-  }, []);
+    load(page);
+  }, [page]);
+
+  useEffect(() => {
+    const loadMore = async () => {
+      if (infiniteLoading) return;
+      try {
+        setInfiniteLoading(true);
+        const next = await fetchPopular(infinitePage);
+        setInfiniteItems((prev) => [...prev, ...next]);
+      } catch {
+        setError('무한스크롤 데이터를 불러오지 못했습니다.');
+      } finally {
+        setInfiniteLoading(false);
+      }
+    };
+    loadMore();
+  }, [infinitePage, infiniteLoading]);
+
+  useEffect(() => {
+    if (view !== 'infinite') return;
+    const node = observerRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting && !infiniteLoading) {
+          setInfinitePage((prev) => prev + 1);
+        }
+      },
+      { threshold: 1 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [view, infiniteLoading]);
+
+  const tableData = useMemo(() => pages[page] || movies, [page, pages, movies]);
 
   return (
     <section className="nf-section">
@@ -33,18 +77,65 @@ function Popular() {
         확인할 수 있습니다.
       </p>
 
-      {loading && (
-        <p className="nf-popular__state">
-          <Spinner /> 로딩 중...
-        </p>
-      )}
-      {error && <p className="nf-popular__state nf-popular__state--error">{error}</p>}
-
-      <div className="nf-popular__grid">
-        {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
+      <div className="nf-popular__toolbar">
+        <div className="nf-popular__toggle">
+          <button
+            className={view === 'table' ? 'is-active' : ''}
+            onClick={() => setView('table')}
+          >
+            Table View
+          </button>
+          <button
+            className={view === 'infinite' ? 'is-active' : ''}
+            onClick={() => setView('infinite')}
+          >
+            Infinite Scroll
+          </button>
+        </div>
+        {view === 'table' && (
+          <div className="nf-popular__pager">
+            <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>
+              ← 이전
+            </button>
+            <span>Page {page}</span>
+            <button onClick={() => setPage((p) => p + 1)}>다음 →</button>
+          </div>
+        )}
       </div>
+
+      {view === 'table' && (
+        <>
+          {loading && (
+            <p className="nf-popular__state">
+              <Spinner /> 로딩 중...
+            </p>
+          )}
+          {error && <p className="nf-popular__state nf-popular__state--error">{error}</p>}
+          <div className="nf-popular__grid">
+            {tableData.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+        </>
+      )}
+
+      {view === 'infinite' && (
+        <div className="nf-popular__infinite">
+          <div className="nf-popular__grid">
+            {infiniteItems.map((movie) => (
+              <MovieCard key={`${movie.id}-${movie.release_date}`} movie={movie} />
+            ))}
+          </div>
+          {error && <p className="nf-popular__state nf-popular__state--error">{error}</p>}
+          {infiniteLoading && (
+            <p className="nf-popular__state">
+              <Spinner /> 더 불러오는 중...
+            </p>
+          )}
+          <div ref={observerRef} className="nf-popular__observer" />
+        </div>
+      )}
+      <TopButton />
     </section>
   );
 }

@@ -1,0 +1,114 @@
+.nf-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--nf-border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.nf-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(229, 57, 53, 0.45);
+  box-shadow: 0 16px 38px rgba(229, 57, 53, 0.2);
+}
+
+.nf-card--wished {
+  border-color: rgba(229, 57, 53, 0.7);
+  box-shadow: 0 16px 40px rgba(229, 57, 53, 0.3);
+}
+
+.nf-card__thumb {
+  position: relative;
+  padding-top: 150%;
+  background: linear-gradient(135deg, rgba(229, 57, 53, 0.12), rgba(0, 0, 0, 0.4));
+}
+
+.nf-card--compact .nf-card__thumb {
+  padding-top: 140%;
+}
+
+.nf-card__thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nf-card__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--nf-muted);
+  font-size: 0.95rem;
+}
+
+.nf-card__badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  background: linear-gradient(135deg, var(--nf-accent), var(--nf-accent-2));
+  color: #0d0f16;
+  box-shadow: 0 10px 22px rgba(229, 57, 53, 0.3);
+}
+
+.nf-card__wish {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  border: none;
+  background: rgba(0, 0, 0, 0.4);
+  color: #ffd166;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.nf-card__wish:hover {
+  transform: scale(1.05);
+  background: rgba(229, 57, 53, 0.6);
+}
+
+.nf-card__body {
+  padding: 12px 14px 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.nf-card--compact .nf-card__body {
+  padding: 10px 10px 12px;
+}
+
+.nf-card__meta {
+  margin: 0;
+  color: var(--nf-muted);
+  font-size: 0.9rem;
+}
+
+.nf-card__overview {
+  margin: 0;
+  color: var(--nf-muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nf-card h3,
+.nf-card h4 {
+  margin: 0;
+}

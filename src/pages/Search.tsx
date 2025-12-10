@@ -1,7 +1,8 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { searchMovies, fetchPopular, TmdbMovie } from '../api/tmdb';
 import './search.css';
-import '../styles/cards.css';
+import MovieCard from '../components/movie/MovieCard';
+import Spinner from '../components/common/Spinner';
 
 function Search() {
   const [query, setQuery] = useState('');
@@ -57,33 +58,16 @@ function Search() {
         <button type="submit">검색</button>
       </form>
 
-      {loading && <p className="nf-search__state">로딩 중...</p>}
+      {loading && (
+        <p className="nf-search__state">
+          <Spinner /> 로딩 중...
+        </p>
+      )}
       {error && <p className="nf-search__state nf-search__state--error">{error}</p>}
 
       <div className="nf-search__grid">
         {movies.map((movie) => (
-          <article key={movie.id} className="nf-card">
-            <div className="nf-card__thumb">
-              {movie.poster_path ? (
-                <img
-                  src={`${
-                    process.env.REACT_APP_TMDB_IMAGE_BASE || 'https://image.tmdb.org/t/p'
-                  }/w500${movie.poster_path}`}
-                  alt={movie.title}
-                  loading="lazy"
-                />
-              ) : (
-                <div className="nf-card__placeholder">No Image</div>
-              )}
-            </div>
-            <div className="nf-card__body">
-              <h3>{movie.title}</h3>
-              <p className="nf-card__meta">
-                평점 {movie.vote_average.toFixed(1)} · {movie.release_date}
-              </p>
-              <p className="nf-card__overview">{movie.overview || '설명이 없습니다.'}</p>
-            </div>
-          </article>
+          <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
     </section>

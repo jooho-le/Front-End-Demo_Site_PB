@@ -7,7 +7,8 @@ import {
   TmdbMovie,
 } from '../api/tmdb';
 import './home.css';
-import '../styles/cards.css';
+import MovieCard from '../components/movie/MovieCard';
+import Spinner from '../components/common/Spinner';
 
 type Section = {
   title: string;
@@ -53,7 +54,11 @@ function Home() {
         인기, 상영중, 평점 상위, 개봉 예정 작품을 TMDB에서 가져와 하이라이트로 보여줍니다.
       </p>
 
-      {loading && <p className="nf-home__state">로딩 중...</p>}
+      {loading && (
+        <p className="nf-home__state">
+          <Spinner /> 로딩 중...
+        </p>
+      )}
       {error && <p className="nf-home__state nf-home__state--error">{error}</p>}
 
       <div className="nf-home__grid">
@@ -67,28 +72,7 @@ function Home() {
             </div>
             <div className="nf-home__cards">
               {section.data.map((movie) => (
-                <article key={movie.id} className="nf-card nf-card--compact">
-                  <div className="nf-card__thumb">
-                    {movie.poster_path ? (
-                      <img
-                        src={`${
-                          process.env.REACT_APP_TMDB_IMAGE_BASE ||
-                          'https://image.tmdb.org/t/p'
-                        }/w300${movie.poster_path}`}
-                        alt={movie.title}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="nf-card__placeholder">No Image</div>
-                    )}
-                  </div>
-                  <div className="nf-card__body">
-                    <h4>{movie.title}</h4>
-                    <p className="nf-card__meta">
-                      평점 {movie.vote_average.toFixed(1)} · {movie.release_date}
-                    </p>
-                  </div>
-                </article>
+                <MovieCard key={movie.id} movie={movie} size="sm" />
               ))}
             </div>
           </div>

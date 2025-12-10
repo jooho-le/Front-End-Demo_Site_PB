@@ -49,3 +49,40 @@
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
 }
+
+.nf-search__filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin: 8px 0 14px;
+}
+
+.nf-search__filters select,
+.nf-search__filters input[type='number'] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--nf-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+}
+
+.nf-search__filters select:focus,
+.nf-search__filters input[type='number']:focus {
+  outline: none;
+  border-color: rgba(229, 57, 53, 0.5);
+  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.12);
+}
+
+.nf-search__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.nf-search__actions button:nth-child(2) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f4f5f7;
+  box-shadow: none;
+  border: 1px solid var(--nf-border);
+}

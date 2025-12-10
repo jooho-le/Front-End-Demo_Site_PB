@@ -36,7 +36,7 @@ jobs:
         run: npm run build
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           # CRA는 build 폴더에 결과물이 나옴
           path: ./build

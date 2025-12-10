@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchPopular, TmdbMovie } from '../api/tmdb';
 import './popular.css';
-import '../styles/cards.css';
+import MovieCard from '../components/movie/MovieCard';
+import Spinner from '../components/common/Spinner';
 
 function Popular() {
   const [movies, setMovies] = useState<TmdbMovie[]>([]);
@@ -32,31 +33,16 @@ function Popular() {
         확인할 수 있습니다.
       </p>
 
-      {loading && <p className="nf-popular__state">로딩 중...</p>}
+      {loading && (
+        <p className="nf-popular__state">
+          <Spinner /> 로딩 중...
+        </p>
+      )}
       {error && <p className="nf-popular__state nf-popular__state--error">{error}</p>}
 
       <div className="nf-popular__grid">
         {movies.map((movie) => (
-          <article key={movie.id} className="nf-card">
-            <div className="nf-card__thumb">
-              {movie.poster_path ? (
-                <img
-                  src={`${process.env.REACT_APP_TMDB_IMAGE_BASE || 'https://image.tmdb.org/t/p'}/w500${movie.poster_path}`}
-                  alt={movie.title}
-                  loading="lazy"
-                />
-              ) : (
-                <div className="nf-card__placeholder">No Image</div>
-              )}
-            </div>
-            <div className="nf-card__body">
-              <h3>{movie.title}</h3>
-              <p className="nf-card__meta">
-                평점 {movie.vote_average.toFixed(1)} · {movie.release_date}
-              </p>
-              <p className="nf-card__overview">{movie.overview || '설명이 없습니다.'}</p>
-            </div>
-          </article>
+          <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
     </section>

@@ -7,7 +7,7 @@ import {
   TmdbMovie,
 } from '../api/tmdb';
 import './home.css';
-import MovieCard from '../components/movie/MovieCard';
+import MovieRow from '../components/movie/MovieRow';
 import Spinner from '../components/common/Spinner';
 
 type Section = {
@@ -61,21 +61,17 @@ function Home() {
       )}
       {error && <p className="nf-home__state nf-home__state--error">{error}</p>}
 
-      <div className="nf-home__grid">
+      <div className="nf-home__rows">
         {sections.map((section) => (
-          <div key={section.title} className="nf-home__column">
-            <div className="nf-home__column-head">
-              <span className="nf-section__badge nf-section__badge--small">
-                {section.badge}
-              </span>
-              <h3>{section.title}</h3>
-            </div>
-            <div className="nf-home__cards">
-              {section.data.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} size="sm" />
-              ))}
-            </div>
-          </div>
+          <MovieRow
+            key={section.title}
+            title={section.title}
+            badge={section.badge}
+            movies={section.data}
+            loading={loading}
+            error={error}
+            size="sm"
+          />
         ))}
       </div>
     </section>

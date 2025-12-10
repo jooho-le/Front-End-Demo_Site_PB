@@ -16,35 +16,53 @@ concurrency:
 
 jobs:
   build:
-    if: ${{ hashFiles('**/package-lock.json', '**/yarn.lock', '**/pnpm-lock.yaml') != '' }}
     runs-on: ubuntu-latest
+    outputs:
+      has_lockfile: ${{ steps.detect-lock.outputs.has_lockfile }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Detect lockfile
+        id: detect-lock
+        run: |
+          if [ -f package-lock.json ] || [ -f yarn.lock ] || [ -f pnpm-lock.yaml ]; then
+            echo "has_lockfile=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_lockfile=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Node
+        if: steps.detect-lock.outputs.has_lockfile == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'npm'
 
       - name: Install deps
+        if: steps.detect-lock.outputs.has_lockfile == 'true'
         # package-lock.json 있으면 npm ci, 없으면 npm install 로 바꿔줘
         run: npm ci
 
       - name: Build
+        if: steps.detect-lock.outputs.has_lockfile == 'true'
         # CRA 기준: npm run build → build/ 폴더 생성
         run: npm run build
 
       - name: Upload artifact
+        if: steps.detect-lock.outputs.has_lockfile == 'true'
         uses: actions/upload-pages-artifact@v4
         with:
           # CRA는 build 폴더에 결과물이 나옴
           path: ./build
 
+      - name: Skip summary
+        if: steps.detect-lock.outputs.has_lockfile != 'true'
+        run: echo "No lockfile found; build/deploy skipped." >> "$GITHUB_STEP_SUMMARY"
+
   deploy:
     needs: build
-    if: ${{ needs.build.result == 'success' }}
+    if: ${{ needs.build.result == 'success' && needs.build.outputs.has_lockfile == 'true' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages

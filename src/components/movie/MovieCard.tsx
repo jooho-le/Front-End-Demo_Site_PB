@@ -14,11 +14,14 @@ function MovieCard({ movie, size = 'md' }: Props) {
 
   const imageBase = process.env.REACT_APP_TMDB_IMAGE_BASE || 'https://image.tmdb.org/t/p';
   const width = size === 'sm' ? 'w300' : 'w500';
+  const HeartIcon = (
+    <FaHeart aria-hidden="true" fill={wished ? '#ff6b8a' : 'rgba(255,255,255,0.75)'} />
+  );
 
   return (
     <article className={`nf-card ${size === 'sm' ? 'nf-card--compact' : ''} ${wished ? 'nf-card--wished' : ''}`}>
       <button className="nf-card__wish" onClick={() => toggle(movie)} aria-label="toggle wishlist">
-        <FaHeart fill={wished ? '#ff6b8a' : 'rgba(255,255,255,0.75)'} />
+        {HeartIcon}
       </button>
       <div className="nf-card__thumb">
         {movie.poster_path ? (

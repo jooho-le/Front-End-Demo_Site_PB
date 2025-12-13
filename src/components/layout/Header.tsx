@@ -1,16 +1,16 @@
-import { ComponentType, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FaHome, FaFire, FaSearch, FaHeart, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import './header.css';
 
-type NavLinkItem = { to: string; label: string; icon: ComponentType };
+type NavLinkItem = { to: string; label: string; icon: ReactElement };
 
 const navLinks: NavLinkItem[] = [
-  { to: '/', label: 'Home', icon: FaHome },
-  { to: '/popular', label: 'Popular', icon: FaFire },
-  { to: '/search', label: 'Search', icon: FaSearch },
-  { to: '/wishlist', label: 'Wishlist', icon: FaHeart },
+  { to: '/', label: 'Home', icon: <FaHome /> },
+  { to: '/popular', label: 'Popular', icon: <FaFire /> },
+  { to: '/search', label: 'Search', icon: <FaSearch /> },
+  { to: '/wishlist', label: 'Wishlist', icon: <FaHeart /> },
 ];
 
 function Header() {
@@ -38,9 +38,7 @@ function Header() {
               `nf-header__link ${isActive ? 'is-active' : ''}`
             }
           >
-            <span className="nf-header__icon">
-              <link.icon />
-            </span>
+            <span className="nf-header__icon">{link.icon}</span>
             {link.label}
           </NavLink>
         ))}

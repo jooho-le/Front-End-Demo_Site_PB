@@ -20,7 +20,7 @@ function TopButton() {
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Go to top"
     >
-      <FaArrowUp /> Top
+      <FaArrowUp aria-hidden="true" /> Top
     </button>
   );
 }

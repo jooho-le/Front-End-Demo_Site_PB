@@ -10,10 +10,12 @@
   color: #0d0f16;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  will-change: transform, box-shadow, filter;
 }
 
 .nf-top:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 36px rgba(229, 57, 53, 0.45);
+  filter: drop-shadow(0 0 10px rgba(255, 120, 120, 0.25));
 }

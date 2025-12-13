@@ -29,6 +29,7 @@
   display: flex;
   justify-content: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .nf-header__link {
@@ -36,10 +37,11 @@
   text-decoration: none;
   padding: 8px 14px;
   border-radius: 999px;
-  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  will-change: transform, box-shadow;
 }
 
 .nf-header__link:hover {
@@ -107,6 +109,22 @@
   }
 
   .nf-header__nav {
+    grid-column: span 2;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .nf-header__link {
+    padding: 8px 10px;
+    font-size: 0.95rem;
+  }
+
+  .nf-header__logo a {
+    font-size: 1rem;
+  }
+
+  .nf-header__actions {
     grid-column: span 2;
     justify-content: flex-start;
     flex-wrap: wrap;

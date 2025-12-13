@@ -2,6 +2,7 @@ import './movie-detail.css';
 import { getImageUrl } from '../../api/tmdb';
 import { useDetailCache } from '../../hooks/useDetailCache';
 import Spinner from '../common/Spinner';
+import { STORAGE_KEYS, readJSON, persistJSON } from '../../utils/storage';
 
 type Props = {
   movieId: number | null;
@@ -10,6 +11,16 @@ type Props = {
 
 function MovieDetailModal({ movieId, onClose }: Props) {
   const { data, loading, error } = useDetailCache(movieId);
+
+  // 시청 기록 저장 (최대 20개, 최신 우선)
+  if (data) {
+    const history = readJSON<{ id: number; title: string; poster_path: string | null; ts: number }[]>(
+      STORAGE_KEYS.watchHistory,
+      [],
+    );
+    const next = [{ id: data.id, title: data.title, poster_path: data.poster_path, ts: Date.now() }, ...history.filter((h) => h.id !== data.id)].slice(0, 20);
+    persistJSON(STORAGE_KEYS.watchHistory, next);
+  }
 
   if (!movieId) return null;
 

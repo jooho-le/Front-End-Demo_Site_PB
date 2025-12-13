@@ -8,6 +8,9 @@ const bearer = process.env.REACT_APP_TMDB_BEARER;
 const baseURL = process.env.REACT_APP_TMDB_API_BASE || 'https://api.themoviedb.org/3';
 const defaultLanguage = process.env.REACT_APP_TMDB_LANGUAGE || 'ko-KR';
 const defaultRegion = process.env.REACT_APP_TMDB_REGION || 'KR';
+const STORAGE_NAMESPACE = process.env.REACT_APP_STORAGE_NAMESPACE || 'netflix-lite';
+const GENRE_CACHE_KEY = `${STORAGE_NAMESPACE}:genres`;
+const GENRE_CACHE_TTL = 1000 * 60 * 60 * 24; // 24h
 
 if (!apiKey) {
   // eslint-disable-next-line no-console
@@ -99,7 +102,30 @@ export async function searchMovies(query: string, page = 1) {
 export type TmdbGenre = { id: number; name: string };
 
 export async function fetchGenres() {
+  // 1) LocalStorage 캐시 우선 (유효기간 24h)
+  if (typeof localStorage !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(GENRE_CACHE_KEY);
+      if (raw) {
+        const cached = JSON.parse(raw) as { ts: number; genres: TmdbGenre[] };
+        if (cached?.genres && Array.isArray(cached.genres) && Date.now() - cached.ts < GENRE_CACHE_TTL) {
+          return cached.genres;
+        }
+      }
+    } catch {
+      // ignore parsing errors
+    }
+  }
+
+  // 2) 네트워크 요청 + 로컬 캐시 저장
   const data = await getWithCache<{ genres: TmdbGenre[] }>('/genre/movie/list');
+  if (typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem(GENRE_CACHE_KEY, JSON.stringify({ ts: Date.now(), genres: data.genres }));
+    } catch {
+      // ignore storage quota errors
+    }
+  }
   return data.genres;
 }
 

@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react';
+import { ComponentType, createElement, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import {
-  FaHome,
-  FaFire,
-  FaSearch,
-  FaHeart,
-  FaUser,
-  FaSignOutAlt,
-} from 'react-icons/fa';
+import { FaHome, FaFire, FaSearch, FaHeart, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import './header.css';
 
-const navLinks = [
-  { to: '/', label: 'Home', icon: <FaHome /> },
-  { to: '/popular', label: 'Popular', icon: <FaFire /> },
-  { to: '/search', label: 'Search', icon: <FaSearch /> },
-  { to: '/wishlist', label: 'Wishlist', icon: <FaHeart /> },
+type NavLinkItem = { to: string; label: string; icon: ComponentType };
+
+const navLinks: NavLinkItem[] = [
+  { to: '/', label: 'Home', icon: FaHome },
+  { to: '/popular', label: 'Popular', icon: FaFire },
+  { to: '/search', label: 'Search', icon: FaSearch },
+  { to: '/wishlist', label: 'Wishlist', icon: FaHeart },
 ];
 
 function Header() {
@@ -43,7 +38,7 @@ function Header() {
               `nf-header__link ${isActive ? 'is-active' : ''}`
             }
           >
-            <span className="nf-header__icon">{link.icon}</span>
+            <span className="nf-header__icon">{createElement(link.icon)}</span>
             {link.label}
           </NavLink>
         ))}
@@ -53,13 +48,13 @@ function Header() {
           <>
             <span className="nf-header__user">Hi, {user?.id}</span>
             <button className="nf-pill" onClick={signout}>
-              <FaSignOutAlt /> 로그아웃
+              {createElement(FaSignOutAlt)} 로그아웃
             </button>
           </>
         ) : (
           <>
             <button className="nf-pill" onClick={() => openModal('signin')}>
-              <FaUser /> 로그인
+              {createElement(FaUser)} 로그인
             </button>
             <button className="nf-pill nf-pill--ghost" onClick={() => openModal('signup')}>
               회원가입

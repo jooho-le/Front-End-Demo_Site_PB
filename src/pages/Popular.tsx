@@ -9,7 +9,8 @@ import { useMovies } from '../hooks/useMovies';
 function Popular() {
   const [view, setView] = useState<'table' | 'infinite'>('table');
   const [page, setPage] = useState(1);
-  const { data: tableData, loading, error } = useMovies<TmdbMovie>(() => fetchPopular(page), [page]);
+  const [error, setError] = useState('');
+  const { data: tableData, loading } = useMovies<TmdbMovie>(() => fetchPopular(page), [page]);
   const [infinitePage, setInfinitePage] = useState(1);
   const [infiniteItems, setInfiniteItems] = useState<TmdbMovie[]>([]);
   const [infiniteLoading, setInfiniteLoading] = useState(false);

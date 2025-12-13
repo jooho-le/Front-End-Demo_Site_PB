@@ -1,4 +1,4 @@
-import { FaHeart } from 'react-icons/fa';
+import * as FaIcons from 'react-icons/fa';
 import { TmdbMovie } from '../../api/tmdb';
 import { useWishlist } from '../../context/WishlistContext';
 import './movie-card.css';
@@ -15,7 +15,7 @@ function MovieCard({ movie, size = 'md' }: Props) {
   const imageBase = process.env.REACT_APP_TMDB_IMAGE_BASE || 'https://image.tmdb.org/t/p';
   const width = size === 'sm' ? 'w300' : 'w500';
   const HeartIcon = (
-    <FaHeart aria-hidden="true" fill={wished ? '#ff6b8a' : 'rgba(255,255,255,0.75)'} />
+    <FaIcons.FaHeart aria-hidden="true" fill={wished ? '#ff6b8a' : 'rgba(255,255,255,0.75)'} />
   );
 
   return (

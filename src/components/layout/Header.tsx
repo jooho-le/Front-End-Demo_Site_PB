@@ -1,16 +1,16 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { FaHome, FaFire, FaSearch, FaHeart, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import * as FaIcons from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import './header.css';
 
 type NavLinkItem = { to: string; label: string; icon: ReactElement };
 
 const navLinks: NavLinkItem[] = [
-  { to: '/', label: 'Home', icon: <FaHome /> },
-  { to: '/popular', label: 'Popular', icon: <FaFire /> },
-  { to: '/search', label: 'Search', icon: <FaSearch /> },
-  { to: '/wishlist', label: 'Wishlist', icon: <FaHeart /> },
+  { to: '/', label: 'Home', icon: <FaIcons.FaHome /> },
+  { to: '/popular', label: 'Popular', icon: <FaIcons.FaFire /> },
+  { to: '/search', label: 'Search', icon: <FaIcons.FaSearch /> },
+  { to: '/wishlist', label: 'Wishlist', icon: <FaIcons.FaHeart /> },
 ];
 
 function Header() {
@@ -48,13 +48,13 @@ function Header() {
           <>
             <span className="nf-header__user">Hi, {user?.id}</span>
             <button className="nf-pill" onClick={signout}>
-              <FaSignOutAlt /> 로그아웃
+              <FaIcons.FaSignOutAlt /> 로그아웃
             </button>
           </>
         ) : (
           <>
             <button className="nf-pill" onClick={() => openModal('signin')}>
-              <FaUser /> 로그인
+              <FaIcons.FaUser /> 로그인
             </button>
             <button className="nf-pill nf-pill--ghost" onClick={() => openModal('signup')}>
               회원가입

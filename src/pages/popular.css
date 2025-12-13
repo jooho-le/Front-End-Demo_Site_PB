@@ -70,3 +70,25 @@
 .nf-popular__observer {
   height: 1px;
 }
+
+@media (max-width: 1024px) {
+  .nf-popular__grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .nf-popular__toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nf-popular__pager {
+    margin-left: 0;
+  }
+
+  .nf-popular__grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+}

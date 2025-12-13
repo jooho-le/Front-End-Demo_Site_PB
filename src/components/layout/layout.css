@@ -45,6 +45,19 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .nf-main {
+    padding: 28px 16px 52px;
+    max-width: 1040px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nf-main {
+    padding: 22px 14px 48px;
+  }
+}
+
 @keyframes nf-backdrop-flow {
   from {
     transform: translate3d(-8px, -6px, 0);

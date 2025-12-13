@@ -1,16 +1,25 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import * as FaIcons from 'react-icons/fa';
+import { FaHome, FaFire, FaSearch, FaHeart, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import type { ComponentType } from 'react';
+import type { IconBaseProps } from 'react-icons';
 import { useAuth } from '../../context/AuthContext';
 import './header.css';
 
-type NavLinkItem = { to: string; label: string; icon: ReactElement };
+type NavLinkItem = { to: string; label: string; Icon: ComponentType<IconBaseProps> };
+
+const IconHome = FaHome as ComponentType<IconBaseProps>;
+const IconFire = FaFire as ComponentType<IconBaseProps>;
+const IconSearch = FaSearch as ComponentType<IconBaseProps>;
+const IconHeart = FaHeart as ComponentType<IconBaseProps>;
+const IconUser = FaUser as ComponentType<IconBaseProps>;
+const IconSignOut = FaSignOutAlt as ComponentType<IconBaseProps>;
 
 const navLinks: NavLinkItem[] = [
-  { to: '/', label: 'Home', icon: <FaIcons.FaHome /> },
-  { to: '/popular', label: 'Popular', icon: <FaIcons.FaFire /> },
-  { to: '/search', label: 'Search', icon: <FaIcons.FaSearch /> },
-  { to: '/wishlist', label: 'Wishlist', icon: <FaIcons.FaHeart /> },
+  { to: '/', label: 'Home', Icon: IconHome },
+  { to: '/popular', label: 'Popular', Icon: IconFire },
+  { to: '/search', label: 'Search', Icon: IconSearch },
+  { to: '/wishlist', label: 'Wishlist', Icon: IconHeart },
 ];
 
 function Header() {
@@ -38,7 +47,9 @@ function Header() {
               `nf-header__link ${isActive ? 'is-active' : ''}`
             }
           >
-            <span className="nf-header__icon">{link.icon}</span>
+            <span className="nf-header__icon">
+              <link.Icon aria-hidden="true" />
+            </span>
             {link.label}
           </NavLink>
         ))}
@@ -48,13 +59,13 @@ function Header() {
           <>
             <span className="nf-header__user">Hi, {user?.id}</span>
             <button className="nf-pill" onClick={signout}>
-              <FaIcons.FaSignOutAlt /> 로그아웃
+              <IconSignOut aria-hidden="true" /> 로그아웃
             </button>
           </>
         ) : (
           <>
             <button className="nf-pill" onClick={() => openModal('signin')}>
-              <FaIcons.FaUser /> 로그인
+              <IconUser aria-hidden="true" /> 로그인
             </button>
             <button className="nf-pill nf-pill--ghost" onClick={() => openModal('signup')}>
               회원가입

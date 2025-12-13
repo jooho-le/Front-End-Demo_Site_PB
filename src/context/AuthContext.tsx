@@ -37,6 +37,42 @@ const STORAGE_KEY_CURRENT = `${STORAGE_NAMESPACE}:currentUser`;
 const STORAGE_KEY_LOGIN = `${STORAGE_NAMESPACE}:login`;
 const STORAGE_KEY_TMDB = `${STORAGE_NAMESPACE}:tmdb-key`;
 const STORAGE_KEY_REMEMBER = `${STORAGE_NAMESPACE}:remember`;
+const LEGACY_KEY_USER = `${STORAGE_NAMESPACE}:user`;
+
+function loadUsers(): AuthUser[] {
+  const raw = localStorage.getItem(STORAGE_KEY_USERS);
+  let users: AuthUser[] = [];
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        users = parsed;
+      } else if (parsed && typeof parsed === 'object' && 'id' in parsed && 'password' in parsed) {
+        users = [parsed as AuthUser];
+      }
+    } catch {
+      users = [];
+    }
+  }
+  if (users.length === 0) {
+    const legacyRaw = localStorage.getItem(LEGACY_KEY_USER);
+    if (legacyRaw) {
+      try {
+        const legacy = JSON.parse(legacyRaw);
+        if (legacy && legacy.id && legacy.password) {
+          users = [legacy];
+        }
+      } catch {
+        users = [];
+      }
+    }
+  }
+  return users;
+}
+
+function persistUsers(list: AuthUser[]) {
+  localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(list));
+}
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -47,17 +83,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const storedUsers = localStorage.getItem(STORAGE_KEY_USERS);
     const storedCurrent = localStorage.getItem(STORAGE_KEY_CURRENT);
     const storedLogin = localStorage.getItem(STORAGE_KEY_LOGIN) === 'true';
-    if (storedUsers) {
-      try {
-        const list: AuthUser[] = JSON.parse(storedUsers);
-        const found = list.find((u) => u.id === storedCurrent);
-        if (found) setUser(found);
-      } catch {
-        // ignore parse errors
-      }
+    const list = loadUsers();
+    const found = list.find((u) => u.id === storedCurrent);
+    if (found) {
+      setUser(found);
     }
     setIsLoggedIn(storedLogin && !!storedCurrent);
   }, []);
@@ -82,14 +113,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!agree) {
       return { ok: false, message: '약관에 동의해야 합니다.' };
     }
-    const storedUsers = localStorage.getItem(STORAGE_KEY_USERS);
-    const list: AuthUser[] = storedUsers ? JSON.parse(storedUsers) : [];
+    const list = loadUsers();
     if (list.some((u) => u.id === id)) {
       return { ok: false, message: '이미 가입된 이메일입니다.' };
     }
     const newUser: AuthUser = { id, password };
     const next = [...list, newUser];
-    localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(next));
+    persistUsers(next);
     localStorage.setItem(STORAGE_KEY_TMDB, password);
     localStorage.setItem(STORAGE_KEY_CURRENT, newUser.id);
     localStorage.setItem(STORAGE_KEY_LOGIN, 'false');
@@ -101,8 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signin = (id: string, password: string, remember = false) => {
-    const stored = localStorage.getItem(STORAGE_KEY_USERS);
-    const users = stored ? (JSON.parse(stored) as AuthUser[]) : [];
+    const users = loadUsers();
     const found = users.find((u) => u.id === id && u.password === password);
     if (!found) {
       return { ok: false, message: '이메일 또는 비밀번호가 올바르지 않습니다.' };

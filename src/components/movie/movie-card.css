@@ -11,6 +11,7 @@
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.42);
   transform-style: preserve-3d;
   perspective: 900px;
+  will-change: transform, box-shadow, filter, border-color;
 }
 
 .nf-card:hover {

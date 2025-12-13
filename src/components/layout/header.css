@@ -61,6 +61,10 @@
   align-items: center;
 }
 
+.nf-header__lang {
+  min-width: 64px;
+}
+
 .nf-header__user {
   color: var(--nf-muted);
   font-size: 0.95rem;

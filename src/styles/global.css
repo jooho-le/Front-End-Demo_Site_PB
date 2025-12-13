@@ -13,6 +13,19 @@
   background-color: var(--nf-bg);
 }
 
+body[data-theme='dark'] {
+  --nf-bg: #030305;
+  --nf-surface: rgba(255, 255, 255, 0.02);
+  --nf-border: rgba(255, 255, 255, 0.06);
+  --nf-text: #e9ebf5;
+  --nf-muted: rgba(233, 235, 245, 0.78);
+  --nf-accent: #8f6bff; /* 퍼플 */
+  --nf-accent-2: #44c8f5; /* 쿨 블루 */
+  --nf-glow: rgba(143, 107, 255, 0.18);
+  --nf-glow-2: rgba(68, 200, 245, 0.14);
+  --nf-danger: #ff6b8a;
+}
+
 *,
 *::before,
 *::after {
@@ -29,6 +42,14 @@ body {
   color: var(--nf-text);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+}
+
+body[data-theme='dark'] {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(143, 107, 255, 0.16), transparent 36%),
+    radial-gradient(circle at 82% 12%, rgba(68, 200, 245, 0.12), transparent 32%),
+    radial-gradient(circle at 50% 80%, rgba(143, 107, 255, 0.08), transparent 40%),
+    var(--nf-bg);
 }
 
 a {

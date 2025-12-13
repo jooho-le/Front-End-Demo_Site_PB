@@ -1,5 +1,7 @@
-import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, ReactNode } from 'react';
 import { TmdbMovie } from '../api/tmdb';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setWishlist, toggleWishlist as toggleWishlistAction } from '../store/wishlistSlice';
 
 type WishlistContextType = {
   items: TmdbMovie[];
@@ -13,21 +15,25 @@ const STORAGE_KEY_WISHLIST = `${STORAGE_NAMESPACE}:wishlist`;
 const WishlistContext = createContext<WishlistContextType | null>(null);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<TmdbMovie[]>([]);
+  const dispatch = useAppDispatch();
+  const items = useAppSelector((state) => state.wishlist.items);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY_WISHLIST);
     if (stored) {
       try {
-        setItems(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          dispatch(setWishlist(parsed));
+        }
       } catch {
-        setItems([]);
+        dispatch(setWishlist([]));
       }
     }
-  }, []);
+  }, [dispatch]);
 
   const persist = (next: TmdbMovie[]) => {
-    setItems(next);
+    dispatch(setWishlist(next));
     localStorage.setItem(STORAGE_KEY_WISHLIST, JSON.stringify(next));
   };
 
@@ -35,9 +41,13 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
 
   const toggle = (movie: TmdbMovie) => {
     if (isWishlisted(movie.id)) {
-      persist(items.filter((m) => m.id !== movie.id));
+      const next = items.filter((m) => m.id !== movie.id);
+      dispatch(toggleWishlistAction(movie));
+      persist(next);
     } else {
-      persist([...items, movie]);
+      const next = [...items, movie];
+      dispatch(toggleWishlistAction(movie));
+      persist(next);
     }
   };
 

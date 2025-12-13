@@ -1,19 +1,17 @@
-import { useEffect, useState } from 'react';
+import { ElementType, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FaHome, FaFire, FaSearch, FaHeart, FaUser, FaSignOutAlt } from 'react-icons/fa';
-import type { ComponentType } from 'react';
-import type { IconBaseProps } from 'react-icons';
 import { useAuth } from '../../context/AuthContext';
 import './header.css';
 
-type NavLinkItem = { to: string; label: string; Icon: ComponentType<IconBaseProps> };
+type NavLinkItem = { to: string; label: string; Icon: ElementType };
 
-const IconHome = FaHome as ComponentType<IconBaseProps>;
-const IconFire = FaFire as ComponentType<IconBaseProps>;
-const IconSearch = FaSearch as ComponentType<IconBaseProps>;
-const IconHeart = FaHeart as ComponentType<IconBaseProps>;
-const IconUser = FaUser as ComponentType<IconBaseProps>;
-const IconSignOut = FaSignOutAlt as ComponentType<IconBaseProps>;
+const IconHome = FaHome as unknown as ElementType;
+const IconFire = FaFire as unknown as ElementType;
+const IconSearch = FaSearch as unknown as ElementType;
+const IconHeart = FaHeart as unknown as ElementType;
+const IconUser = FaUser as unknown as ElementType;
+const IconSignOut = FaSignOutAlt as unknown as ElementType;
 
 const navLinks: NavLinkItem[] = [
   { to: '/', label: 'Home', Icon: IconHome },

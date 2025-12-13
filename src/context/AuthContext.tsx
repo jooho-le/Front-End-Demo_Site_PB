@@ -6,6 +6,8 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { useAppDispatch } from '../store/hooks';
+import { setLoggedIn, setUser as setStoreUser } from '../store/authSlice';
 
 type AuthUser = {
   id: string;
@@ -81,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mode, setMode] = useState<AuthMode>('signin');
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const storedCurrent = localStorage.getItem(STORAGE_KEY_CURRENT);
@@ -89,9 +92,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const found = list.find((u) => u.id === storedCurrent);
     if (found) {
       setUser(found);
+      dispatch(setStoreUser(found));
     }
-    setIsLoggedIn(storedLogin && !!storedCurrent);
-  }, []);
+    const loginState = storedLogin && !!storedCurrent;
+    setIsLoggedIn(loginState);
+    dispatch(setLoggedIn(loginState));
+  }, [dispatch]);
 
   const openModal = (nextMode: AuthMode) => {
     setMode(nextMode);
@@ -124,7 +130,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY_CURRENT, newUser.id);
     localStorage.setItem(STORAGE_KEY_LOGIN, 'false');
     setUser(newUser);
+    dispatch(setStoreUser(newUser));
     setIsLoggedIn(false);
+    dispatch(setLoggedIn(false));
     setMode('signin');
     setOpen(false);
     return { ok: true };
@@ -145,7 +153,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem(STORAGE_KEY_REMEMBER);
     }
     setUser(found);
+    dispatch(setStoreUser(found));
     setIsLoggedIn(true);
+    dispatch(setLoggedIn(true));
     setOpen(false);
     return { ok: true };
   };
@@ -154,6 +164,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY_LOGIN, 'false');
     localStorage.removeItem(STORAGE_KEY_CURRENT);
     setIsLoggedIn(false);
+    dispatch(setLoggedIn(false));
+    dispatch(setStoreUser(null));
   };
 
   const value = useMemo(

@@ -1,9 +1,9 @@
 import './wishlist.css';
-import MovieCard from '../components/movie/MovieCard';
+import { getImageUrl } from '../api/tmdb';
 import { useWishlist } from '../context/WishlistContext';
 
 function Wishlist() {
-  const { items } = useWishlist();
+  const { items, toggle } = useWishlist();
 
   return (
     <section className="nf-section">
@@ -20,10 +20,52 @@ function Wishlist() {
         </p>
       )}
 
-      <div className="nf-wishlist__grid">
-        {items.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
+      <div className="nf-wishlist__table-wrapper">
+        <table className="nf-wishlist__table">
+          <thead>
+            <tr>
+              <th>포스터</th>
+              <th>제목</th>
+              <th>평점</th>
+              <th>개봉</th>
+              <th>액션</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((movie) => (
+              <tr key={movie.id} className="nf-wishlist__row">
+                <td>
+                  {movie.poster_path ? (
+                    <img
+                      src={getImageUrl(movie.poster_path, 'w200')}
+                      alt={movie.title}
+                      className="nf-wishlist__thumb"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="nf-wishlist__placeholder">No Image</div>
+                  )}
+                </td>
+                <td>
+                  <div className="nf-wishlist__title">
+                    <span className="nf-wishlist__badge">WISHLIST</span>
+                    {movie.title}
+                  </div>
+                  <p className="nf-wishlist__overview">
+                    {movie.overview || '설명이 없습니다.'}
+                  </p>
+                </td>
+                <td>{movie.vote_average.toFixed(1)}</td>
+                <td>{movie.release_date}</td>
+                <td>
+                  <button className="nf-btn nf-btn--ghost" onClick={() => toggle(movie)}>
+                    제거
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
   );

@@ -1,8 +1,8 @@
 .nf-shell {
   min-height: 100vh;
-  background: radial-gradient(circle at 10% 20%, rgba(68, 155, 255, 0.12), transparent 35%),
-    radial-gradient(circle at 90% 10%, rgba(181, 96, 255, 0.12), transparent 35%),
-    linear-gradient(135deg, #050712 0%, #0a1020 50%, #050712 100%);
+  background: radial-gradient(circle at 5% 25%, rgba(229, 57, 106, 0.16), transparent 30%),
+    radial-gradient(circle at 80% 12%, rgba(53, 230, 255, 0.16), transparent 30%),
+    linear-gradient(135deg, #040509 0%, #0a0d16 50%, #05060d 100%);
   color: #e6e9ff;
   position: relative;
   overflow-x: hidden;
@@ -11,10 +11,11 @@
 .nf-backdrop {
   position: fixed;
   inset: 0;
-  background: linear-gradient(120deg, rgba(68, 155, 255, 0.06), rgba(181, 96, 255, 0.05));
-  filter: blur(36px);
+  background: linear-gradient(120deg, rgba(255, 59, 106, 0.08), rgba(53, 230, 255, 0.08));
+  filter: blur(42px);
   z-index: 0;
   pointer-events: none;
+  animation: nf-backdrop-flow 10s ease-in-out infinite alternate;
 }
 
 .nf-main {
@@ -41,5 +42,16 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes nf-backdrop-flow {
+  from {
+    transform: translate3d(-8px, -6px, 0);
+    opacity: 0.95;
+  }
+  to {
+    transform: translate3d(12px, 10px, 0);
+    opacity: 1;
   }
 }

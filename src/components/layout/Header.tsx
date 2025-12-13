@@ -1,16 +1,17 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import * as FaIcons from 'react-icons/fa';
+import { FaHome, FaFire, FaSearch, FaHeart, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import type { ComponentType } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import './header.css';
 
-type NavLinkItem = { to: string; label: string; icon: ReactElement };
+type NavLinkItem = { to: string; label: string; Icon: ComponentType };
 
 const navLinks: NavLinkItem[] = [
-  { to: '/', label: 'Home', icon: <FaIcons.FaHome /> },
-  { to: '/popular', label: 'Popular', icon: <FaIcons.FaFire /> },
-  { to: '/search', label: 'Search', icon: <FaIcons.FaSearch /> },
-  { to: '/wishlist', label: 'Wishlist', icon: <FaIcons.FaHeart /> },
+  { to: '/', label: 'Home', Icon: FaHome },
+  { to: '/popular', label: 'Popular', Icon: FaFire },
+  { to: '/search', label: 'Search', Icon: FaSearch },
+  { to: '/wishlist', label: 'Wishlist', Icon: FaHeart },
 ];
 
 function Header() {
@@ -38,7 +39,9 @@ function Header() {
               `nf-header__link ${isActive ? 'is-active' : ''}`
             }
           >
-            <span className="nf-header__icon">{link.icon}</span>
+            <span className="nf-header__icon">
+              <link.Icon aria-hidden="true" />
+            </span>
             {link.label}
           </NavLink>
         ))}
@@ -48,13 +51,13 @@ function Header() {
           <>
             <span className="nf-header__user">Hi, {user?.id}</span>
             <button className="nf-pill" onClick={signout}>
-              <FaIcons.FaSignOutAlt /> 로그아웃
+              <FaSignOutAlt aria-hidden="true" /> 로그아웃
             </button>
           </>
         ) : (
           <>
             <button className="nf-pill" onClick={() => openModal('signin')}>
-              <FaIcons.FaUser /> 로그인
+              <FaUser aria-hidden="true" /> 로그인
             </button>
             <button className="nf-pill nf-pill--ghost" onClick={() => openModal('signup')}>
               회원가입

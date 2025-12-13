@@ -55,9 +55,9 @@ function Home() {
       </p>
 
       {loading && (
-        <p className="nf-home__state">
+        <div className="nf-home__state">
           <Spinner /> 로딩 중...
-        </p>
+        </div>
       )}
       {error && <p className="nf-home__state nf-home__state--error">{error}</p>}
 

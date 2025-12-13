@@ -1,4 +1,5 @@
 import './wishlist.css';
+import { getImageUrl } from '../api/tmdb';
 import { useWishlist } from '../context/WishlistContext';
 
 function Wishlist() {
@@ -9,7 +10,7 @@ function Wishlist() {
       <div className="nf-section__badge">Wishlist</div>
       <h1 className="nf-section__title">Your curated neon list</h1>
       <p className="nf-section__body">
-        Local Storage에 저장된 추천/위시리스트만 사용합니다. (TMDB API 호출 없음)
+        Local Storage에 저장된 추천/위시리스트를 표시합니다. (이 페이지에서는 TMDB API를 호출하지 않습니다.)
       </p>
 
       {items.length === 0 ? (
@@ -34,9 +35,7 @@ function Wishlist() {
                   <td>
                     {movie.poster_path ? (
                       <img
-                        src={`${
-                          process.env.REACT_APP_TMDB_IMAGE_BASE || 'https://image.tmdb.org/t/p'
-                        }/w200${movie.poster_path}`}
+                        src={getImageUrl(movie.poster_path, 'w200')}
                         alt={movie.title}
                         className="nf-wishlist__thumb"
                         loading="lazy"

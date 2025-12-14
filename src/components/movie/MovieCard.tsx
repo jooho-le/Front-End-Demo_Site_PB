@@ -9,9 +9,10 @@ type Props = {
   movie: TmdbMovie;
   size?: 'md' | 'sm';
   enableDetail?: boolean;
+  genreMap?: Record<number, string>;
 };
 
-function MovieCard({ movie, size = 'md', enableDetail = true }: Props) {
+function MovieCard({ movie, size = 'md', enableDetail = true, genreMap }: Props) {
   const { isWishlisted, toggle } = useWishlist();
   const wished = isWishlisted(movie.id);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -19,6 +20,13 @@ function MovieCard({ movie, size = 'md', enableDetail = true }: Props) {
   const width = size === 'sm' ? 'w300' : 'w500';
   const HeartIcon = FaHeart as unknown as ElementType;
   const openDetail = () => enableDetail && setDetailOpen(true);
+  const genres =
+    movie.genre_ids && genreMap
+      ? movie.genre_ids
+          .map((id) => genreMap[id])
+          .filter(Boolean)
+          .slice(0, 2)
+      : [];
 
   return (
     <>
@@ -62,6 +70,7 @@ function MovieCard({ movie, size = 'md', enableDetail = true }: Props) {
           {size === 'md' && (
             <p className="nf-card__overview">{movie.overview || '설명이 없습니다.'}</p>
           )}
+          {genres.length > 0 && <p className="nf-card__genres">{genres.join(' · ')}</p>}
         </div>
       </article>
       {enableDetail && detailOpen && (

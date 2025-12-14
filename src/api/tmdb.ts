@@ -62,6 +62,7 @@ export type TmdbMovie = {
   poster_path: string | null;
   vote_average: number;
   release_date: string;
+  genre_ids?: number[];
 };
 
 export async function fetchPopular(page = 1) {
@@ -87,6 +88,13 @@ export async function fetchTopRated(page = 1) {
 
 export async function fetchUpcoming(page = 1) {
   const data = await getWithCache<{ results: TmdbMovie[] }>('/movie/upcoming', {
+    params: { page },
+  });
+  return data.results;
+}
+
+export async function fetchTrending(page = 1) {
+  const data = await getWithCache<{ results: TmdbMovie[] }>('/trending/movie/day', {
     params: { page },
   });
   return data.results;

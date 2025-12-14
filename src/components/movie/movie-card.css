@@ -116,6 +116,12 @@
   overflow: hidden;
 }
 
+.nf-card__genres {
+  margin: 4px 0 0;
+  color: rgba(245, 248, 255, 0.82);
+  font-size: 0.85rem;
+}
+
 .nf-card h3,
 .nf-card h4 {
   margin: 0;

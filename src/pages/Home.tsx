@@ -4,7 +4,9 @@ import {
   fetchPopular,
   fetchTopRated,
   fetchUpcoming,
+  fetchTrending,
   TmdbMovie,
+  fetchGenres,
 } from '../api/tmdb';
 import './home.css';
 import MovieRow from '../components/movie/MovieRow';
@@ -20,19 +22,28 @@ function Home() {
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [genreMap, setGenreMap] = useState<Record<number, string>>({});
 
   useEffect(() => {
     const load = async () => {
       try {
         setLoading(true);
-        const [popular, nowPlaying, topRated, upcoming] = await Promise.all([
+        const [popular, nowPlaying, topRated, upcoming, trending, genres] = await Promise.all([
           fetchPopular(1),
           fetchNowPlaying(1),
           fetchTopRated(1),
           fetchUpcoming(1),
+          fetchTrending(1),
+          fetchGenres(),
         ]);
+        const map: Record<number, string> = {};
+        genres.forEach((g) => {
+          map[g.id] = g.name;
+        });
+        setGenreMap(map);
         setSections([
-          { title: '지금 뜨는 작품', badge: 'Popular', data: popular.slice(0, 6) },
+          { title: '지금 뜨는 작품', badge: 'Trending', data: trending.slice(0, 6) },
+          { title: '인기 급상승', badge: 'Popular', data: popular.slice(0, 6) },
           { title: '현재 상영중', badge: 'Now Playing', data: nowPlaying.slice(0, 6) },
           { title: '평점 상위', badge: 'Top Rated', data: topRated.slice(0, 6) },
           { title: '개봉 예정', badge: 'Upcoming', data: upcoming.slice(0, 6) },
@@ -51,7 +62,7 @@ function Home() {
       <div className="nf-section__badge">Home</div>
       <h1 className="nf-section__title">Your neon-curated cinema hub</h1>
       <p className="nf-section__body">
-        인기, 상영중, 평점 상위, 개봉 예정 작품을 TMDB에서 가져와 하이라이트로 보여줍니다.
+        트렌딩, 인기, 상영중, 평점 상위, 개봉 예정 작품을 TMDB에서 가져와 하이라이트로 보여줍니다.
       </p>
 
       {loading && (
@@ -71,6 +82,7 @@ function Home() {
             loading={loading}
             error={error}
             size="sm"
+            genreMap={genreMap}
           />
         ))}
       </div>

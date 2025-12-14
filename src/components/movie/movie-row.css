@@ -1,0 +1,76 @@
+.nf-row {
+  display: grid;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.nf-row__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.nf-row__head h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.nf-row__state {
+  margin-left: auto;
+  color: var(--nf-muted);
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nf-row__state--error {
+  color: #ff9090;
+}
+
+.nf-row__track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(180px, 220px);
+  gap: 12px;
+  overflow-x: auto;
+  padding: 6px 2px 6px 2px;
+  scroll-snap-type: x mandatory;
+  background: linear-gradient(90deg, rgba(255, 59, 106, 0.06), rgba(53, 230, 255, 0.05));
+  border-radius: 14px;
+}
+
+.nf-row__track > * {
+  scroll-snap-align: start;
+}
+
+.nf-row__track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.nf-row__track::-webkit-scrollbar-thumb {
+  background: rgba(229, 57, 53, 0.4);
+  border-radius: 999px;
+}
+
+.nf-row__skeleton {
+  height: 280px;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  animation: nf-row-shimmer 1.1s linear infinite;
+}
+
+@keyframes nf-row-shimmer {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}

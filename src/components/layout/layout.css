@@ -1,0 +1,70 @@
+.nf-shell {
+  min-height: 100vh;
+  background: radial-gradient(circle at 5% 25%, rgba(229, 57, 106, 0.16), transparent 30%),
+    radial-gradient(circle at 80% 12%, rgba(53, 230, 255, 0.16), transparent 30%),
+    linear-gradient(135deg, #040509 0%, #0a0d16 50%, #05060d 100%);
+  color: #e6e9ff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.nf-backdrop {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 59, 106, 0.08), rgba(53, 230, 255, 0.08));
+  filter: blur(42px);
+  z-index: 0;
+  pointer-events: none;
+  animation: nf-backdrop-flow 10s ease-in-out infinite alternate;
+}
+
+.nf-main {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+.nf-main__page {
+  min-height: 70vh;
+}
+
+.nf-main__page--animate {
+  animation: nf-page-fade 0.4s ease;
+}
+
+@keyframes nf-page-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .nf-main {
+    padding: 28px 16px 52px;
+    max-width: 1040px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nf-main {
+    padding: 22px 14px 48px;
+  }
+}
+
+@keyframes nf-backdrop-flow {
+  from {
+    transform: translate3d(-8px, -6px, 0);
+    opacity: 0.95;
+  }
+  to {
+    transform: translate3d(12px, 10px, 0);
+    opacity: 1;
+  }
+}

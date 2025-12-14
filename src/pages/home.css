@@ -1,0 +1,19 @@
+.nf-home__state {
+  margin: 12px 0;
+  color: var(--nf-muted);
+}
+
+.nf-home__state--error {
+  color: #ff9090;
+}
+
+.nf-home__rows {
+  display: grid;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.nf-section__badge--small {
+  padding: 4px 10px;
+  font-size: 0.78rem;
+}

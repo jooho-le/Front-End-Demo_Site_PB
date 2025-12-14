@@ -27,6 +27,7 @@
   "engines": {
     "node": ">=20"
   },
+  "homepage": "https://jooho-le.github.io/Front-End-Demo_Site_PB",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -37,7 +38,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ],
-    "homepage" : "https://jooho-le.github.io/Front-End-Demo_Site_PB"
+    ]
   }
 }

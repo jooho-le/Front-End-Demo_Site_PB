@@ -14,15 +14,29 @@ function Popular() {
   const [infinitePage, setInfinitePage] = useState(1);
   const [infiniteItems, setInfiniteItems] = useState<TmdbMovie[]>([]);
   const [infiniteLoading, setInfiniteLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
+
+  // 뷰 전환 시 무한스크롤 상태 리셋
+  useEffect(() => {
+    if (view === 'infinite') {
+      setInfiniteItems([]);
+      setInfinitePage(1);
+      setHasMore(true);
+    }
+  }, [view]);
 
   useEffect(() => {
     const loadMore = async () => {
-      if (infiniteLoading) return;
+      if (infiniteLoading || !hasMore) return;
       try {
         setInfiniteLoading(true);
         const next = await fetchPopular(infinitePage);
-        setInfiniteItems((prev) => [...prev, ...next]);
+        if (next.length === 0) {
+          setHasMore(false);
+        } else {
+          setInfiniteItems((prev) => [...prev, ...next]);
+        }
       } catch {
         setError('무한스크롤 데이터를 불러오지 못했습니다.');
       } finally {
@@ -114,6 +128,9 @@ function Popular() {
             <p className="nf-popular__state">
               <Spinner /> 더 불러오는 중...
             </p>
+          )}
+          {!hasMore && !infiniteLoading && (
+            <p className="nf-popular__state">마지막 페이지입니다.</p>
           )}
           <div ref={observerRef} className="nf-popular__observer" />
         </div>

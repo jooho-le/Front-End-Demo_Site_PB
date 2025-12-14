@@ -4,6 +4,7 @@ import { useToast } from '../common/ToastProvider';
 import './auth.css';
 
 function AuthModal() {
+  // 모든 훅은 조건 없이 항상 같은 순서로 호출
   const { mode, open, closeModal, signin, signup, openModal } = useAuth();
   const { addToast } = useToast();
   const [id, setId] = useState('');
@@ -14,8 +15,7 @@ function AuthModal() {
   const [error, setError] = useState('');
   const idRef = useRef<HTMLInputElement | null>(null);
 
-  if (!open) return null;
-
+  // 포커스 처리도 조건 없이 실행
   useEffect(() => {
     if (open && idRef.current) {
       idRef.current.focus();
@@ -47,7 +47,10 @@ function AuthModal() {
         : '회원가입 완료! TMDB 키가 설정되었습니다. 로그인하세요.',
       'success',
     );
+    closeModal();
   };
+
+  if (!open) return null;
 
   return (
     <div className="nf-auth__backdrop" onClick={closeModal}>

@@ -41,21 +41,12 @@ function AuthModal() {
     setPwConfirm('');
     setRemember(false);
     setAgree(false);
-<<<<<<< HEAD
-
-    if (mode === 'signin') {
-      addToast('로그인 완료! TMDB 키가 설정되었습니다.', 'success');
-    } else {
-      addToast('회원가입 완료! TMDB 키가 설정되었습니다. 로그인하세요.', 'success');
-    }
-=======
     addToast(
       mode === 'signin'
         ? '로그인 완료! TMDB 키가 설정되었습니다.'
         : '회원가입 완료! TMDB 키가 설정되었습니다. 로그인하세요.',
       'success',
     );
->>>>>>> feature/search-filters
   };
 
   return (

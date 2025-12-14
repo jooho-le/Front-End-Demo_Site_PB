@@ -57,6 +57,41 @@
   margin: 8px 0 14px;
 }
 
+.nf-search__history {
+  margin: 14px 0 8px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nf-search__history-label {
+  font-size: 0.9rem;
+  color: var(--nf-muted);
+}
+
+.nf-search__history-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nf-chip {
+  border: 1px solid var(--nf-border);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.nf-chip:hover {
+  transform: translateY(-2px);
+  border-color: var(--nf-accent);
+  background: linear-gradient(135deg, rgba(255, 59, 106, 0.15), rgba(53, 230, 255, 0.1));
+}
+
 .nf-search__filters select,
 .nf-search__filters input[type='number'] {
   width: 100%;
@@ -85,4 +120,35 @@
   color: #f4f5f7;
   box-shadow: none;
   border: 1px solid var(--nf-border);
+}
+
+@media (max-width: 1024px) {
+  .nf-search__grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .nf-search__form {
+    flex-wrap: wrap;
+  }
+
+  .nf-search__form input,
+  .nf-search__form button {
+    width: 100%;
+  }
+
+  .nf-search__filters {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .nf-search__grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .nf-search__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

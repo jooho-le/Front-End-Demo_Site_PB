@@ -1,5 +1,8 @@
-import { useEffect, useState } from 'react';
+import { ElementType, useEffect, useState } from 'react';
+import { FaArrowUp } from 'react-icons/fa';
 import './top-button.css';
+
+const ArrowIcon = FaArrowUp as unknown as ElementType;
 
 function TopButton() {
   const [visible, setVisible] = useState(false);
@@ -19,7 +22,7 @@ function TopButton() {
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Go to top"
     >
-      ↑ Top
+      <ArrowIcon aria-hidden="true" focusable="false" /> Top
     </button>
   );
 }

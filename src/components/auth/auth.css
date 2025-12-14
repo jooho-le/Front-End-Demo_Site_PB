@@ -11,14 +11,25 @@
 
 .nf-auth__card {
   width: min(440px, 90vw);
-  background: linear-gradient(160deg, rgba(229, 57, 53, 0.12), rgba(255, 255, 255, 0.03));
-  border: 1px solid rgba(229, 57, 53, 0.35);
-  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(255, 59, 106, 0.14), rgba(53, 230, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
   padding: 20px 20px 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
-  transform: translateY(8px) scale(0.96);
+  transform: translateY(8px) scale(0.96) rotateX(-4deg);
   opacity: 0;
   animation: nf-auth-pop 0.28s ease forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+.nf-auth__card::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(from 120deg, rgba(255, 59, 106, 0.15), rgba(53, 230, 255, 0.08), transparent 40%);
+  filter: blur(28px);
+  z-index: 0;
 }
 
 .nf-auth__tabs {
@@ -26,6 +37,8 @@
   grid-template-columns: 1fr 1fr;
   gap: 6px;
   margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
 }
 
 .nf-auth__tab {
@@ -35,19 +48,25 @@
   background: rgba(255, 255, 255, 0.05);
   color: #f4f5f7;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+  will-change: transform, filter;
 }
 
 .nf-auth__tab.is-active {
   background: linear-gradient(135deg, var(--nf-accent), var(--nf-accent-2));
   color: #0d0f16;
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(229, 57, 53, 0.4);
+  box-shadow: 0 12px 26px rgba(255, 59, 106, 0.42);
+  filter: drop-shadow(0 0 12px rgba(53, 230, 255, 0.3));
 }
 
 .nf-auth__form {
   display: grid;
   gap: 12px;
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  will-change: transform, opacity;
 }
 
 .nf-auth__field {
@@ -78,6 +97,18 @@
   font-size: 0.9rem;
 }
 
+.nf-auth__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--nf-muted);
+  font-size: 0.95rem;
+}
+
+.nf-auth__checkbox input {
+  accent-color: var(--nf-accent);
+}
+
 .nf-auth__cta {
   width: 100%;
   border: none;
@@ -93,6 +124,17 @@
 .nf-auth__cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 20px 38px rgba(229, 57, 53, 0.5);
+}
+
+.nf-auth__form.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(6px);
+}
+
+.nf-auth__form.is-visible {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 @keyframes nf-auth-fade {

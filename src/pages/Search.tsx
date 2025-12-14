@@ -14,6 +14,10 @@ function Search() {
   const [genreId, setGenreId] = useState<number | ''>('');
   const [minRating, setMinRating] = useState<number | ''>('');
   const [sort, setSort] = useState<'release' | 'popularity'>('popularity');
+  const [history, setHistory] = useState<string[]>([]);
+
+  const STORAGE_NAMESPACE = process.env.REACT_APP_STORAGE_NAMESPACE || 'netflix-lite';
+  const HISTORY_KEY = `${STORAGE_NAMESPACE}:search-history`;
 
   useEffect(() => {
     const load = async () => {
@@ -24,6 +28,18 @@ function Search() {
         setGenres(g);
         setMovies(data.slice(0, 12));
         setFiltered(data.slice(0, 12));
+        // 최근 검색어 로드
+        try {
+          const raw = localStorage.getItem(HISTORY_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              setHistory(parsed.slice(0, 5));
+            }
+          }
+        } catch {
+          setHistory([]);
+        }
       } catch {
         setError('TMDB 데이터를 불러오지 못했습니다.');
       } finally {
@@ -42,6 +58,16 @@ function Search() {
       setMovies(data);
       setFiltered(data);
       setError('');
+      // 최근 검색어 저장 (중복 제거, 최대 5개)
+      setHistory((prev) => {
+        const next = [query.trim(), ...prev.filter((q) => q !== query.trim())].slice(0, 5);
+        try {
+          localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+        } catch {
+          // ignore quota errors
+        }
+        return next;
+      });
     } catch {
       setError('검색에 실패했습니다. API 키와 네트워크를 확인하세요.');
     } finally {
@@ -126,6 +152,41 @@ function Search() {
           필터 초기화
         </button>
       </div>
+
+      {history.length > 0 && (
+        <div className="nf-search__history">
+          <span className="nf-search__history-label">최근 검색</span>
+          <div className="nf-search__history-chips">
+            {history.map((h) => (
+              <button
+                key={h}
+                type="button"
+                className="nf-chip"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setQuery(h);
+                  // 즉시 같은 흐름으로 검색 실행
+                  (async () => {
+                    try {
+                      setLoading(true);
+                      const data = await searchMovies(h, 1);
+                      setMovies(data);
+                      setFiltered(data);
+                      setError('');
+                    } catch {
+                      setError('검색에 실패했습니다. API 키와 네트워크를 확인하세요.');
+                    } finally {
+                      setLoading(false);
+                    }
+                  })();
+                }}
+              >
+                {h}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {loading && (
         <p className="nf-search__state">

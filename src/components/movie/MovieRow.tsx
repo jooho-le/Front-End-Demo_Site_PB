@@ -10,9 +10,10 @@ type Props = {
   loading?: boolean;
   error?: string;
   size?: 'md' | 'sm';
+  genreMap?: Record<number, string>;
 };
 
-function MovieRow({ title, badge, movies, loading, error, size = 'sm' }: Props) {
+function MovieRow({ title, badge, movies, loading, error, size = 'sm', genreMap }: Props) {
   return (
     <div className="nf-row">
       <div className="nf-row__head">
@@ -30,7 +31,9 @@ function MovieRow({ title, badge, movies, loading, error, size = 'sm' }: Props) 
           ? Array.from({ length: 6 }).map((_, idx) => (
               <div key={idx} className="nf-row__skeleton" />
             ))
-          : movies.map((movie) => <MovieCard key={movie.id} movie={movie} size={size} />)}
+          : movies.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} size={size} genreMap={genreMap} />
+            ))}
       </div>
     </div>
   );

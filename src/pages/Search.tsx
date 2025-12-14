@@ -15,6 +15,8 @@ function Search() {
   const [minRating, setMinRating] = useState<number | ''>('');
   const [sort, setSort] = useState<'release' | 'popularity'>('popularity');
   const [history, setHistory] = useState<string[]>([]);
+  const [minYear, setMinYear] = useState<number | ''>('');
+  const [minPopularity, setMinPopularity] = useState<number | ''>('');
 
   const STORAGE_NAMESPACE = process.env.REACT_APP_STORAGE_NAMESPACE || 'netflix-lite';
   const HISTORY_KEY = `${STORAGE_NAMESPACE}:search-history`;
@@ -83,17 +85,28 @@ function Search() {
     if (minRating !== '' && typeof minRating === 'number') {
       next = next.filter((m) => m.vote_average >= minRating);
     }
+    if (minPopularity !== '' && typeof minPopularity === 'number') {
+      next = next.filter((m: any) => (m.popularity || 0) >= minPopularity);
+    }
+    if (minYear !== '' && typeof minYear === 'number') {
+      next = next.filter((m) => {
+        const year = m.release_date ? Number(m.release_date.slice(0, 4)) : 0;
+        return year >= minYear;
+      });
+    }
     if (sort === 'release') {
       next = next.sort((a, b) => (b.release_date || '').localeCompare(a.release_date || ''));
     } else {
       next = next.sort((a, b) => b.vote_average - a.vote_average);
     }
     setFiltered(next);
-  }, [movies, genreId, minRating, sort]);
+  }, [movies, genreId, minRating, sort, minPopularity, minYear]);
 
   const resetFilters = () => {
     setGenreId('');
     setMinRating('');
+    setMinYear('');
+    setMinPopularity('');
     setSort('popularity');
     setFiltered(movies);
   };
@@ -137,6 +150,22 @@ function Search() {
           onChange={(e) => setMinRating(e.target.value === '' ? '' : Number(e.target.value))}
           min={0}
           max={10}
+        />
+        <input
+          type="number"
+          placeholder="최소 개봉 연도 (예: 2015)"
+          value={minYear}
+          onChange={(e) => setMinYear(e.target.value === '' ? '' : Number(e.target.value))}
+          min={1900}
+          max={2100}
+        />
+        <input
+          type="number"
+          placeholder="최소 인기점수 (popularity)"
+          value={minPopularity}
+          onChange={(e) => setMinPopularity(e.target.value === '' ? '' : Number(e.target.value))}
+          min={0}
+          step="1"
         />
         <select value={sort} onChange={(e) => setSort(e.target.value as 'release' | 'popularity')}>
           <option value="popularity">평점 높은 순</option>

@@ -14,6 +14,7 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import { store } from './store';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ensureStorageVersion } from './utils/storage';
+import { ToastProvider } from './components/common/ToastProvider';
 
 ensureStorageVersion();
 
@@ -21,25 +22,27 @@ function App() {
   return (
     <BrowserRouter>
       <ReduxProvider store={store}>
-        <PreferencesProvider>
-          <AuthProvider>
-            <WishlistProvider>
-              <MainLayout>
-                <Routes>
-                  <Route element={<ProtectedRoute />}>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/popular" element={<Popular />} />
-                    <Route path="/search" element={<Search />} />
-                    <Route path="/wishlist" element={<Wishlist />} />
-                  </Route>
-                  <Route path="/signin" element={<SignIn />} />
-                  <Route path="/signup" element={<SignUp />} />
-                </Routes>
-                <AuthModal />
-              </MainLayout>
-            </WishlistProvider>
-          </AuthProvider>
-        </PreferencesProvider>
+        <ToastProvider>
+          <PreferencesProvider>
+            <AuthProvider>
+              <WishlistProvider>
+                <MainLayout>
+                  <Routes>
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/popular" element={<Popular />} />
+                      <Route path="/search" element={<Search />} />
+                      <Route path="/wishlist" element={<Wishlist />} />
+                    </Route>
+                    <Route path="/signin" element={<SignIn />} />
+                    <Route path="/signup" element={<SignUp />} />
+                  </Routes>
+                  <AuthModal />
+                </MainLayout>
+              </WishlistProvider>
+            </AuthProvider>
+          </PreferencesProvider>
+        </ToastProvider>
       </ReduxProvider>
     </BrowserRouter>
   );

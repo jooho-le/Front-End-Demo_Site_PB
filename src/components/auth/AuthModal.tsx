@@ -1,25 +1,45 @@
 import { FormEvent, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../common/ToastProvider';
 import './auth.css';
 
 function AuthModal() {
   const { mode, open, closeModal, signin, signup, openModal } = useAuth();
+  const { addToast } = useToast();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  const [pwConfirm, setPwConfirm] = useState('');
+  const [remember, setRemember] = useState(false);
+  const [agree, setAgree] = useState(false);
   const [error, setError] = useState('');
 
   if (!open) return null;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const result = mode === 'signin' ? signin(id, pw) : signup(id, pw);
+    if (mode === 'signup' && pw !== pwConfirm) {
+      setError('비밀번호 확인이 일치하지 않습니다.');
+      return;
+    }
+    const result =
+      mode === 'signin' ? signin(id, pw, remember) : signup(id, pw, pwConfirm, agree);
     if (!result.ok) {
       setError(result.message || '다시 시도해주세요.');
+      addToast(result.message || '오류가 발생했습니다.', 'error');
       return;
     }
     setError('');
     setId('');
     setPw('');
+    setPwConfirm('');
+    setRemember(false);
+    setAgree(false);
+
+    if (mode === 'signin') {
+      addToast('로그인 완료! TMDB 키가 설정되었습니다.', 'success');
+    } else {
+      addToast('회원가입 완료! TMDB 키가 설정되었습니다. 로그인하세요.', 'success');
+    }
   };
 
   return (
@@ -60,6 +80,33 @@ function AuthModal() {
               placeholder="비밀번호"
             />
           </label>
+          {mode === 'signup' && (
+            <label className="nf-auth__field">
+              <span>비밀번호 확인</span>
+              <input
+                type="password"
+                value={pwConfirm}
+                onChange={(e) => setPwConfirm(e.target.value)}
+                placeholder="비밀번호 확인"
+              />
+            </label>
+          )}
+          {mode === 'signin' && (
+            <label className="nf-auth__checkbox">
+              <input
+                type="checkbox"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+              />
+              <span>자동 로그인 (Remember me)</span>
+            </label>
+          )}
+          {mode === 'signup' && (
+            <label className="nf-auth__checkbox">
+              <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+              <span>약관에 동의합니다.</span>
+            </label>
+          )}
           {error && <p className="nf-auth__error">{error}</p>}
           <button type="submit" className="nf-auth__cta">
             {mode === 'signin' ? '로그인' : '회원가입'}

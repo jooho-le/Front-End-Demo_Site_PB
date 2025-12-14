@@ -1,0 +1,51 @@
+.nf-toast-stack {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  gap: 10px;
+  z-index: 120;
+  pointer-events: none;
+}
+
+.nf-toast {
+  min-width: 240px;
+  max-width: 320px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #0d0f16;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, #fff, #f4f5f7);
+  animation: nf-toast-in 0.25s ease, nf-toast-out 0.25s ease 2.6s forwards;
+}
+
+.nf-toast--success {
+  border: 1px solid rgba(53, 230, 255, 0.35);
+}
+
+.nf-toast--error {
+  border: 1px solid rgba(255, 99, 132, 0.45);
+  background: linear-gradient(135deg, #ffe5ea, #ffd9e2);
+}
+
+.nf-toast--info {
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+@keyframes nf-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes nf-toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}

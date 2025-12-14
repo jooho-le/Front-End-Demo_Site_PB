@@ -41,27 +41,12 @@ function AuthModal() {
     setPwConfirm('');
     setRemember(false);
     setAgree(false);
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
-    if (mode === 'signin') {
-      addToast('로그인 완료! TMDB 키가 설정되었습니다.', 'success');
-    } else {
-      addToast('회원가입 완료! TMDB 키가 설정되었습니다. 로그인하세요.', 'success');
-    }
-=======
->>>>>>> f0ef4ef (chore: set homepage for GitHub Pages)
     addToast(
       mode === 'signin'
         ? '로그인 완료! TMDB 키가 설정되었습니다.'
         : '회원가입 완료! TMDB 키가 설정되었습니다. 로그인하세요.',
       'success',
     );
-<<<<<<< HEAD
-=======
->>>>>>> feature/search-filters
->>>>>>> f0ef4ef (chore: set homepage for GitHub Pages)
   };
 
   return (

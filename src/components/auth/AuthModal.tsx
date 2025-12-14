@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../common/ToastProvider';
 import './auth.css';
@@ -12,8 +12,15 @@ function AuthModal() {
   const [remember, setRemember] = useState(false);
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState('');
+  const idRef = useRef<HTMLInputElement | null>(null);
 
   if (!open) return null;
+
+  useEffect(() => {
+    if (open && idRef.current) {
+      idRef.current.focus();
+    }
+  }, [open, mode]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,12 +41,12 @@ function AuthModal() {
     setPwConfirm('');
     setRemember(false);
     setAgree(false);
-
-    if (mode === 'signin') {
-      addToast('로그인 완료! TMDB 키가 설정되었습니다.', 'success');
-    } else {
-      addToast('회원가입 완료! TMDB 키가 설정되었습니다. 로그인하세요.', 'success');
-    }
+    addToast(
+      mode === 'signin'
+        ? '로그인 완료! TMDB 키가 설정되었습니다.'
+        : '회원가입 완료! TMDB 키가 설정되었습니다. 로그인하세요.',
+      'success',
+    );
   };
 
   return (
@@ -65,6 +72,7 @@ function AuthModal() {
           <label className="nf-auth__field">
             <span>아이디</span>
             <input
+              ref={idRef}
               value={id}
               onChange={(e) => setId(e.target.value)}
               autoFocus

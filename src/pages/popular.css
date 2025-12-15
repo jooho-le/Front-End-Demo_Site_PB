@@ -7,6 +7,12 @@
   color: #ff9090;
 }
 
+.nf-popular__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
 .nf-popular__track {
   display: grid;
   grid-auto-flow: column;

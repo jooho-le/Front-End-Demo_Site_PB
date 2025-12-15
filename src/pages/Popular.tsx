@@ -16,6 +16,9 @@ function Popular() {
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const infiniteTrackRef = useRef<HTMLDivElement | null>(null);
+  const [activeInfiniteIndex, setActiveInfiniteIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   // 뷰 전환 시 무한스크롤 상태 리셋
   useEffect(() => {
@@ -65,6 +68,33 @@ function Popular() {
 
   const memoTable = useMemo(() => tableData, [tableData]);
 
+  // infinite view 자동 슬라이드 (현재까지 로드된 항목 대상)
+  useEffect(() => {
+    const track = infiniteTrackRef.current;
+    if (!track || infiniteItems.length === 0 || view !== 'infinite') return;
+    const first = track.querySelector<HTMLElement>('.nf-popular__item');
+    const cardWidth = first?.offsetWidth || 220;
+    const gap = 16;
+    const handleScroll = () => {
+      const idx = Math.round(track.scrollLeft / (cardWidth + gap));
+      setActiveInfiniteIndex(idx >= 0 ? idx : 0);
+    };
+    track.addEventListener('scroll', handleScroll, { passive: true });
+    const timer = window.setInterval(() => {
+      if (paused) return;
+      setActiveInfiniteIndex((prev) => {
+        const next = infiniteItems.length > 0 ? (prev + 1) % infiniteItems.length : 0;
+        track.scrollTo({ left: next * (cardWidth + gap), behavior: 'smooth' });
+        return next;
+      });
+    }, 3800);
+    track.scrollTo({ left: 0, behavior: 'smooth' });
+    return () => {
+      track.removeEventListener('scroll', handleScroll);
+      window.clearInterval(timer);
+    };
+  }, [infiniteItems.length, view, paused]);
+
   return (
     <section className="nf-section">
       <div className="nf-section__badge">Popular</div>
@@ -110,7 +140,9 @@ function Popular() {
           {error && <p className="nf-popular__state nf-popular__state--error">{error}</p>}
           <div className="nf-popular__grid">
             {memoTable.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
+              <div key={movie.id} className="nf-popular__item">
+                <MovieCard movie={movie} size="md" />
+              </div>
             ))}
           </div>
         </>
@@ -118,9 +150,21 @@ function Popular() {
 
       {view === 'infinite' && (
         <div className="nf-popular__infinite">
-          <div className="nf-popular__grid">
+          <div
+            className="nf-popular__track"
+            ref={infiniteTrackRef}
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
             {infiniteItems.map((movie) => (
-              <MovieCard key={`${movie.id}-${movie.release_date}`} movie={movie} />
+              <div
+                key={`${movie.id}-${movie.release_date}`}
+                className={`nf-popular__item ${
+                  infiniteItems.indexOf(movie) === activeInfiniteIndex ? 'is-active' : ''
+                }`}
+              >
+                <MovieCard movie={movie} size="md" />
+              </div>
             ))}
           </div>
           {error && <p className="nf-popular__state nf-popular__state--error">{error}</p>}

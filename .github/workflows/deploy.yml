@@ -10,6 +10,10 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  # TMDB API 키를 Actions 시크릿으로 주입해 CRA 빌드에 포함시킵니다.
+  REACT_APP_TMDB_API_KEY: ${{ secrets.REACT_APP_TMDB_API_KEY }}
+
 concurrency:
   group: "pages"
   cancel-in-progress: true

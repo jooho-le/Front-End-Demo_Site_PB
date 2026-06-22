@@ -25,7 +25,7 @@ jobs:
       has_lockfile: ${{ steps.detect-lock.outputs.has_lockfile }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Detect lockfile
         id: detect-lock
